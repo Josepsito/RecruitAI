@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+ollama:
+  api:
+    url: ${OLLAMA_URL}
+
+spring:
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASS}
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create-drop
+
+  ai:
+    vectorstore:
+      chroma:
+        client:
+          host: ${CHROMA_HOST}
+          port: ${CHROMA_PORT}
+        collection-name: recluter_vectors
+        initialize-schema: true
+
+jwt:
+  secret: ${SECRET_KEY}
+  expiration: 86400000
