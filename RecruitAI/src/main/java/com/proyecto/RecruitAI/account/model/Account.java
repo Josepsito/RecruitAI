@@ -1,31 +1,22 @@
-package com.proyecto.RecruitAI.userAccount.model;
+package com.proyecto.RecruitAI.account.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class UserAccount {
+@Table(name = "user_account")
+public class Account {
 
     @Id
     @Column(length = 36, name = "user_id")
     private String userId;
 
-    @Column(nullable = false)
-    private String fullName;
-
     private String password;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
 
     @Column(nullable = false, unique = true, length = 150)
     private String email;
-
-    private LocalDate birthdate;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
@@ -35,6 +26,13 @@ public abstract class UserAccount {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column
+    private String profilePhoto;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TypeAccount typeAccount;
 
     @PrePersist
     public void prePersist() {
@@ -52,18 +50,7 @@ public abstract class UserAccount {
         updatedAt = LocalDateTime.now();
     }
 
-    public UserAccount(String fullName,String password, String phoneNumber,
-                       String email, LocalDate birthdate) {
-        this.fullName = fullName;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.birthdate = birthdate;
-        this.isActive = true;
-    }
-
-    public UserAccount() {
-        this.isActive = true;
+    public Account() {
     }
 
     public String getUserId() {
@@ -74,28 +61,12 @@ public abstract class UserAccount {
         this.userId = userId;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -106,20 +77,20 @@ public abstract class UserAccount {
         this.email = email;
     }
 
-    public LocalDate getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(LocalDate birthdate) {
-        this.birthdate = birthdate;
-    }
-
     public boolean isActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -130,11 +101,19 @@ public abstract class UserAccount {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public String getProfilePhoto() {
+        return profilePhoto;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public TypeAccount getTypeAccount() {
+        return typeAccount;
+    }
+
+    public void setTypeAccount(TypeAccount typeAccount) {
+        this.typeAccount = typeAccount;
     }
 }
