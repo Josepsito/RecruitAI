@@ -1,8 +1,10 @@
 package com.proyecto.RecruitAI.company.service;
 
+import com.proyecto.RecruitAI.account.dto.request.CreateAccountCompanyRequest;
 import com.proyecto.RecruitAI.account.model.Account;
 import com.proyecto.RecruitAI.account.model.TypeAccount;
 import com.proyecto.RecruitAI.account.repository.AccountRepository;
+import com.proyecto.RecruitAI.account.service.AccountService;
 import com.proyecto.RecruitAI.company.dto.CompanyRequest;
 import com.proyecto.RecruitAI.company.dto.CompanyResponse;
 import com.proyecto.RecruitAI.company.model.Company;
@@ -17,10 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyService {
 
+    private final AccountService accountService;
     private final CompanyRepository companyRepository;
     private final AccountRepository accountRepository;
 
-    public CompanyService(CompanyRepository companyRepository, AccountRepository accountRepository) {
+    public CompanyService(AccountService accountService, CompanyRepository companyRepository, AccountRepository accountRepository) {
+        this.accountService = accountService;
         this.companyRepository = companyRepository;
         this.accountRepository = accountRepository;
     }
@@ -37,33 +41,14 @@ public class CompanyService {
         return CompanyResponse.fromEntity(company);
     }
 
-    public CompanyResponse createCompany(CompanyRequest request) {
-        Account account = accountRepository.findById(request.accountUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found with id: " + request.accountUserId()));
-
-        if (account.getTypeAccount() != TypeAccount.COMPANY) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The account type must be COMPANY");
-        }
-
-        if (companyRepository.existsByAccountUserId(request.accountUserId())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "An account can only be linked to one company profile");
-        }
-
-        Company company = new Company();
-        company.setName(request.name());
-        company.setWebsite(request.website());
-        company.setDescription(request.description());
-        company.setAccount(account);
-
-        Company savedCompany = companyRepository.save(company);
-        return CompanyResponse.fromEntity(savedCompany);
+    public void createCompany(CreateAccountCompanyRequest request) {
+        accountService.createNewCompany(request);
     }
 
     public CompanyResponse updateCompany(String id, CompanyRequest request) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id));
 
-        // If changing account, perform validation
         if (!company.getAccount().getUserId().equals(request.accountUserId())) {
             Account newAccount = accountRepository.findById(request.accountUserId())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found with id: " + request.accountUserId()));
@@ -89,6 +74,12 @@ public class CompanyService {
     public void deleteCompany(String id) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Company not found with id: " + id));
+
+        String accountId = company.getAccount().getUserId();
+
+        accountService.deleteAccount(accountId);
         companyRepository.delete(company);
+
     }
+
 }

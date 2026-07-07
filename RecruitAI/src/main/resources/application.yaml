@@ -5,6 +5,10 @@ ollama:
   api:
     url: ${OLLAMA_URL}
 
+logging:
+  level:
+    org.springframework.security: TRACE
+
 spring:
   datasource:
     url: ${MYSQL_URL}
@@ -14,7 +18,7 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
   ai:
     vectorstore:

@@ -51,6 +51,7 @@ public class JobOfferService {
         offer.setRemote(request.remote());
         offer.setExpirationDate(request.expirationDate());
         offer.setEmploymentType(request.employmentType());
+
         if (request.status() != null) {
             offer.setStatus(request.status());
         }

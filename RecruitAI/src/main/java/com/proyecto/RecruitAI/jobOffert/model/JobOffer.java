@@ -1,224 +1,224 @@
-package com.proyecto.RecruitAI.jobOffert.model;
+    package com.proyecto.RecruitAI.jobOffert.model;
 
-import com.proyecto.RecruitAI.applicationJob.model.ApplicationJob;
-import com.proyecto.RecruitAI.company.model.Company;
-import jakarta.persistence.*;
+    import com.proyecto.RecruitAI.applicationJob.model.ApplicationJob;
+    import com.proyecto.RecruitAI.company.model.Company;
+    import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+    import java.time.LocalDate;
+    import java.time.LocalDateTime;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.UUID;
 
-@Entity
-@Table(name = "job_offer")
-public class JobOffer {
+    @Entity
+    @Table(name = "job_offer")
+    public class JobOffer {
 
-    @Id
-    @Column(length = 36)
-    private String id;
+        @Id
+        @Column(length = 36)
+        private String id;
 
-    @Column(nullable = false, length = 150)
-    private String title;
+        @Column(nullable = false, length = 150)
+        private String title;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
+        @Column(columnDefinition = "TEXT")
+        private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String requirements;
+        @Column(columnDefinition = "TEXT")
+        private String requirements;
 
-    @Column(columnDefinition = "TEXT")
-    private String responsibilities;
+        @Column(columnDefinition = "TEXT")
+        private String responsibilities;
 
-    private Double salaryMin;
+        private Double salaryMin;
 
-    private Double salaryMax;
+        private Double salaryMax;
 
-    private String location;
+        private String location;
 
-    private boolean remote;
+        private boolean remote;
 
-    private LocalDate expirationDate;
+        private LocalDate expirationDate;
 
-    @Enumerated(EnumType.STRING)
-    private EmploymentType employmentType;
+        @Enumerated(EnumType.STRING)
+        private EmploymentType employmentType;
 
-    @OneToMany(mappedBy = "jobOffer", cascade = CascadeType.ALL)
-    private List<ApplicationJob> applicationJobs = new ArrayList<>();
+        @OneToMany(mappedBy = "jobOffer", cascade = CascadeType.ALL)
+        private List<ApplicationJob> applicationJobs = new ArrayList<>();
 
-    @Enumerated(EnumType.STRING)
-    private JobOfferStatus status;
+        @Enumerated(EnumType.STRING)
+        private JobOfferStatus status;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+        @Column(nullable = false)
+        private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+        private LocalDateTime updatedAt;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "company_id")
-    private Company company;
+        @ManyToOne(optional = false)
+        @JoinColumn(name = "company_id")
+        private Company company;
 
-    @PrePersist
-    public void prePersist() {
-        if (id == null) {
-            id = UUID.randomUUID().toString();
+        @PrePersist
+        public void prePersist() {
+            if (id == null) {
+                id = UUID.randomUUID().toString();
+            }
+
+            if (createdAt == null) {
+                createdAt = LocalDateTime.now();
+            }
+
+            if (status == null) {
+                status = JobOfferStatus.OPEN;
+            }
         }
 
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
+        @PreUpdate
+        public void preUpdate() {
+            updatedAt = LocalDateTime.now();
         }
 
-        if (status == null) {
-            status = JobOfferStatus.OPEN;
+        public String getId() {
+            return id;
         }
-    }
 
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public String getTitle() {
+            return title;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-    public String getTitle() {
-        return title;
-    }
+        public String getDescription() {
+            return description;
+        }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+        public void setDescription(String description) {
+            this.description = description;
+        }
 
-    public String getDescription() {
-        return description;
-    }
+        public String getRequirements() {
+            return requirements;
+        }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+        public void setRequirements(String requirements) {
+            this.requirements = requirements;
+        }
 
-    public String getRequirements() {
-        return requirements;
-    }
+        public String getResponsibilities() {
+            return responsibilities;
+        }
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
+        public void setResponsibilities(String responsibilities) {
+            this.responsibilities = responsibilities;
+        }
 
-    public String getResponsibilities() {
-        return responsibilities;
-    }
+        public Double getSalaryMin() {
+            return salaryMin;
+        }
 
-    public void setResponsibilities(String responsibilities) {
-        this.responsibilities = responsibilities;
-    }
+        public void setSalaryMin(Double salaryMin) {
+            this.salaryMin = salaryMin;
+        }
 
-    public Double getSalaryMin() {
-        return salaryMin;
-    }
+        public Double getSalaryMax() {
+            return salaryMax;
+        }
 
-    public void setSalaryMin(Double salaryMin) {
-        this.salaryMin = salaryMin;
-    }
+        public void setSalaryMax(Double salaryMax) {
+            this.salaryMax = salaryMax;
+        }
 
-    public Double getSalaryMax() {
-        return salaryMax;
-    }
+        public String getLocation() {
+            return location;
+        }
 
-    public void setSalaryMax(Double salaryMax) {
-        this.salaryMax = salaryMax;
-    }
+        public void setLocation(String location) {
+            this.location = location;
+        }
 
-    public String getLocation() {
-        return location;
-    }
+        public boolean isRemote() {
+            return remote;
+        }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+        public void setRemote(boolean remote) {
+            this.remote = remote;
+        }
 
-    public boolean isRemote() {
-        return remote;
-    }
+        public LocalDate getExpirationDate() {
+            return expirationDate;
+        }
 
-    public void setRemote(boolean remote) {
-        this.remote = remote;
-    }
+        public void setExpirationDate(LocalDate expirationDate) {
+            this.expirationDate = expirationDate;
+        }
 
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
+        public EmploymentType getEmploymentType() {
+            return employmentType;
+        }
 
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
+        public void setEmploymentType(EmploymentType employmentType) {
+            this.employmentType = employmentType;
+        }
 
-    public EmploymentType getEmploymentType() {
-        return employmentType;
-    }
+        public List<ApplicationJob> getApplicationJobs() {
+            return applicationJobs;
+        }
 
-    public void setEmploymentType(EmploymentType employmentType) {
-        this.employmentType = employmentType;
-    }
+        public void setApplicationJobs(List<ApplicationJob> applicationJobs) {
+            this.applicationJobs = applicationJobs;
+        }
 
-    public List<ApplicationJob> getApplicationJobs() {
-        return applicationJobs;
-    }
+        public JobOfferStatus getStatus() {
+            return status;
+        }
 
-    public void setApplicationJobs(List<ApplicationJob> applicationJobs) {
-        this.applicationJobs = applicationJobs;
-    }
+        public void setStatus(JobOfferStatus status) {
+            this.status = status;
+        }
 
-    public JobOfferStatus getStatus() {
-        return status;
-    }
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
 
-    public void setStatus(JobOfferStatus status) {
-        this.status = status;
-    }
+        public void setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+        }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+        public LocalDateTime getUpdatedAt() {
+            return updatedAt;
+        }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+        public void setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+        }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+        public Company getCompany() {
+            return company;
+        }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+        public void setCompany(Company company) {
+            this.company = company;
+        }
 
-    public Company getCompany() {
-        return company;
-    }
+        public enum EmploymentType {
+            FULL_TIME,
+            PART_TIME,
+            CONTRACT,
+            TEMPORARY,
+            INTERNSHIP,
+            FREELANCE
+        }
 
-    public void setCompany(Company company) {
-        this.company = company;
-    }
+        public enum JobOfferStatus {
+            OPEN,
+            CLOSED,
+            PAUSED
+        }
 
-    public enum EmploymentType {
-        FULL_TIME,
-        PART_TIME,
-        CONTRACT,
-        TEMPORARY,
-        INTERNSHIP,
-        FREELANCE
     }
-
-    public enum JobOfferStatus {
-        OPEN,
-        CLOSED,
-        PAUSED
-    }
-
-}

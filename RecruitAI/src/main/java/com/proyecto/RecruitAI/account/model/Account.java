@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user_account")
+@Table(name = "account")
 public class Account {
 
     @Id
@@ -115,5 +115,19 @@ public class Account {
 
     public void setTypeAccount(TypeAccount typeAccount) {
         this.typeAccount = typeAccount;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "userId='" + userId + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", isActive=" + isActive +
+                ", updatedAt=" + updatedAt +
+                ", createdAt=" + createdAt +
+                ", profilePhoto='" + profilePhoto + '\'' +
+                ", typeAccount=" + typeAccount +
+                '}';
     }
 }

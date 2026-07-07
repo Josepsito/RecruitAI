@@ -1,10 +1,12 @@
 package com.proyecto.RecruitAI.company.controller;
 
+import com.proyecto.RecruitAI.account.dto.request.CreateAccountCompanyRequest;
 import com.proyecto.RecruitAI.company.dto.CompanyRequest;
 import com.proyecto.RecruitAI.company.dto.CompanyResponse;
 import com.proyecto.RecruitAI.company.service.CompanyService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +32,9 @@ public class CompanyController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CompanyResponse createCompany(@Valid @RequestBody CompanyRequest request) {
-        return companyService.createCompany(request);
+    public ResponseEntity<String> createCompany(@Valid @RequestBody CreateAccountCompanyRequest request) {
+        companyService.createCompany(request);
+        return ResponseEntity.status(201).body("Compañia creada correctamente");
     }
 
     @PutMapping("/{id}")

@@ -1,10 +1,12 @@
 package com.proyecto.RecruitAI.candidate.controller;
 
+import com.proyecto.RecruitAI.account.dto.request.CreateAccountCandidateRequest;
 import com.proyecto.RecruitAI.candidate.dto.CandidateRequest;
 import com.proyecto.RecruitAI.candidate.dto.CandidateResponse;
 import com.proyecto.RecruitAI.candidate.service.CandidateService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +32,9 @@ public class CandidateController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CandidateResponse createCandidate(@Valid @RequestBody CandidateRequest request) {
-        return candidateService.createCandidate(request);
+    public ResponseEntity<String> createCandidate(@Valid @RequestBody CreateAccountCandidateRequest request) {
+        candidateService.createCandidate(request);
+        return ResponseEntity.status(201).body("Candidato creado correctamente");
     }
 
     @PutMapping("/{id}")
