@@ -9,6 +9,10 @@ import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
+
+import java.time.Duration;
 
 @Configuration
 public class ChatConfig {
@@ -18,7 +22,23 @@ public class ChatConfig {
 
     @Bean
     public OllamaApi ollamaApi(){
+
+
+        SimpleClientHttpRequestFactory requestFactory =
+                new SimpleClientHttpRequestFactory();
+
+        // 5 minutos para establecer la conexión
+        requestFactory.setConnectTimeout(Duration.ofMinutes(5));
+
+        // 5 minutos esperando la respuesta de Ollama
+        requestFactory.setReadTimeout(Duration.ofMinutes(5));
+
+        RestClient.Builder restClientBuilder = RestClient.builder()
+                .requestFactory(requestFactory);
+
+
         return OllamaApi.builder()
+                .restClientBuilder(restClientBuilder)
                 .baseUrl(ollamaApiUrl)
                 .build();
     }
@@ -38,7 +58,7 @@ public class ChatConfig {
     public OllamaChatOptions ollamaChatOptions(){
         return OllamaChatOptions.builder()
                 .temperature(0.5)
-                .model("llama3:latest")
+                .model("llama3:8b")
                 .build();
     }
 
