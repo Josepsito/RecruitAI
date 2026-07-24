@@ -1,7 +1,6 @@
 package com.proyecto.RecruitAI.skill.dto;
 
-public record SkillResponse(
-        Integer id,
+public record SkillDTO (
         String skill
-) {
+){
 }

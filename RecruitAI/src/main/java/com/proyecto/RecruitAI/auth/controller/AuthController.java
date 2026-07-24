@@ -5,7 +5,6 @@ import com.proyecto.RecruitAI.security.jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request, @AuthenticationPrincipal UserDetails userDetails) {
+    public String login(@RequestBody LoginRequest request) {
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -36,7 +35,7 @@ public class AuthController {
 
         UserDetails user = (UserDetails) auth.getPrincipal();
 
-        System.out.println(userDetails);
+        assert user != null;
 
         return jwtService.generateToken(
                 user.getUsername(),
